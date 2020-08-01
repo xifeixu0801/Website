@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/ftl/web/decorators">
+	<excludes>
+		<pattern>/css/*</pattern>
+		<pattern>/img/*</pattern>
+		<pattern>/images/*</pattern>
+		<pattern>/js/*</pattern>
+		<pattern>/fonts/*</pattern>
+		<pattern>/ajax/*</pattern>
+		<pattern>/web/*</pattern>
+	</excludes>
+	<decorator name="main" page="main.html">
+		<pattern>/index.htm</pattern>
+		<pattern>/news/show_*.htm</pattern>
+		<pattern>/news/detial_*.htm</pattern>
+		<pattern>/product/detial_*.htm</pattern>
+		<pattern>/sucProduct/detial_*.htm</pattern>
+		<pattern>/aboutUs/detial_*.htm</pattern>
+		<pattern>/recruit/show.htm</pattern>
+		<pattern>/contact.htm</pattern>
+	</decorator>
+</decorators>
+

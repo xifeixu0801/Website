@@ -1,0 +1,27 @@
+<#if result.pages &gt; 1>
+	<script>
+		layui.use(['laypage', 'layer'], function(){
+		  var laypage = layui.laypage
+		  ,layer = layui.layer;
+		
+		  laypage({
+				cont : "page",
+				pages : ${result.pages},
+				curr:function(){ //通过url获取当前页，也可以同上（pages）方式获取  
+	                var page = location.search.match(/current=(\d+)/);  
+	                return page ? page[1] : 1;  
+	            }(),  //获取hash值为fenye的当前页
+			    /* hash: '',//自定义hash值 */
+			    	prev:"上一页",//上一页   
+	                next:"下一页  ",//下一页  
+	                jump: function(obj,first){//点击页码出发的事件  
+	                    if(first!=true){//是否首次进入页面  
+	                        var currentPage = obj.curr;//获取点击的页码      
+	                        window.location.href ="${pageUrl}current="+currentPage;  
+	                    }
+	                }  
+				
+			})
+		})
+</script>
+</#if>

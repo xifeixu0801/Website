@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>角色管理-${sysName}</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+	<link rel="stylesheet" href="${resRoot}/css/main.css" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>系统角色管理</legend>
+</fieldset>
+<@shiro.hasPermission name="role:save">
+<div class="site-demo-button" style="margin-bottom: 0;">
+  <button class="layui-btn site-demo-active" data-type="tabAdd" onclick="javascript:window.location.href='${base}/sys/role/tosave.htm'"  >新增角色</button>
+  </div>
+</@shiro.hasPermission>
+<div class="layui-form">
+
+		<table class="layui-table">
+    <colgroup>
+      <col width="50%">
+      <col width="50%">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>角色名称</th>
+        <th>操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+    	<#list result.datas as roleDTO>
+       	<tr>
+	        <td>${roleDTO.roleName}</td>
+	        <td>
+	        <@shiro.hasPermission name="role:save">
+	        <a class="layui-btn layui-btn-mini links_edit" href="${base}/sys/role/tosave.htm?id=${roleDTO.id}"><i class="iconfont icon-edit"></i>修改</a> 
+	        </@shiro.hasPermission>
+	        <@shiro.hasPermission name="role:save">
+	        <a class="layui-btn layui-btn-mini links_edit" href="${base}/sys/role/tosave.htm?id=${roleDTO.id}"><i class="iconfont icon-edit"></i>分配</a>
+	        </@shiro.hasPermission>
+	        <@shiro.hasPermission name="role:del">
+	        <a class="layui-btn layui-btn-danger layui-btn-mini links_del" href="javascript:void(0);" onclick="del('${roleDTO.id}');" ><i class="layui-icon"></i>删除</a> 
+	        </@shiro.hasPermission>
+	        </td>
+      	</tr>
+      	</#list>
+    </tbody>
+  </table>
+  
+	<script type="text/javascript" src="${resRoot}/layui/layui.js"></script>
+<div id="page"></div>
+<#assign pageUrl=base+'/sys/role/show.htm?'>
+	<#include "/page/page.html"> 
+</div>
+
+	<script type="text/javascript" src="${resRoot}/js/jquery.min.js"></script>
+<script>
+layui.use('form', function(){
+  var $ = layui.jquery, form = layui.form();
+  
+  
+});
+function del(id) {
+	layer.confirm('确定删除该条角色吗?', function(index){
+	$.ajax({
+		type : "post",
+		url : "${base}/sys/role/del.htm",
+		data : {
+			id : id
+			},
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			if(data.message == 0) {
+				layer.msg('删除成功！', {
+					  icon: 1,
+					  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+					  //do something
+						window.location.href="${base}/sys/role/show.htm";
+					});   
+				} else {
+				layer.msg("当前角色有用户在使用状态。请先解除绑定角色！");
+				}
+		}
+	}); 
+	});   
+}
+
+</script>
+</body>
+</html>

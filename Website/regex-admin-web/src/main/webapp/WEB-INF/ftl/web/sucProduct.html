@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<title>成功过案例-${product.keywords}</title>
+		<meta name="keywords" content="${product.keywords}" />
+		 <meta name="description" content="${product.description}" />
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						成功案例
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<#list sucProductList as product>
+							<li class="list-group-item">
+								<a href="${base}/sucProduct/detial_${product.id}.htm">${product.name}</a>
+							</li>
+							</#list>
+							
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-9 bg-white">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">${sucProductDTO.name}</li>
+					</ol>
+					<div class="model-details">
+						${sucProductDTO.detial}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

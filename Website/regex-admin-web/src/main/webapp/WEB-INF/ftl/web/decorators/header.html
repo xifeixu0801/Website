@@ -1,0 +1,140 @@
+<div class=" title-logo   hidden-xs">
+			<div class="container">
+				<div class="row">
+					<div class="logo col-sm-6 col-xs-12">
+						<a href="${base}/">
+							<h1><img alt="科技" style="width:50px;height:50px;" src="${resRoot}/images/logo_210.png"><i>&emsp;|&emsp;${webInfo.header}</i></h1>
+						</a>
+					</div>
+					<div class="top-phone col-sm-6">
+						<div class="con-phone">
+							<span>全国服务热线</span>
+							<p>${webInfo.tel}</p>
+						</div>
+						<div class="phone-icon">
+							<span class="glyphicon glyphicon-phone-alt"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<a href="${base}/" class="hidden-sm hidden-md hidden-lg pull-left mobile-logo">
+					<h1><img alt="科技" style="width:30px;height:30px;" src="${resRoot}/images/logo_210.png"><i>&emsp;|&emsp;${webInfo.header}</i></h1>
+				</a>
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse" aria-expanded="false">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				   </button>
+				</div>
+				<div class="collapse navbar-collapse " id="bs-example-navbar-collapse">
+					<ul class="nav navbar-nav" style="width:100%;">
+						<li class="active nav-top">
+							<a href="${base}/">首页</a>
+						</li>
+						<li class="dropdown nav-top">
+							<a href="${base}/aboutUs/detial_1.htm" class="dropdown-toggle on" data-toggle="dropdown">关于我们</a>
+							<ul class="dropdown-menu">
+								<#list aboutUsListFilter as aboutUs>
+								<li>
+									<a href="${base}/aboutUs/detial_${aboutUs.id}.htm">${aboutUs.name}</a>
+								</li>
+								</#list>
+								<!-- <li>
+									<a href="culture.html">企业文化</a>
+								</li>
+								<li>
+									<a href="honor.html">企业荣誉</a>
+								</li> -->
+							</ul>
+						</li>
+						<li class=" nav-top dropdown">
+							<a href="${base}/product/detial_1.htm" class="dropdown-toggle on">产品中心</a>
+							<ul class="dropdown-menu">
+								<#list productListFilter as product>
+								<li>
+									<a href="${base}/product/detial_${product.id}.htm">${product.name}</a>
+								</li>
+								</#list>
+								<!-- <li>
+									<a href="serlist-wx.html">咨询服务</a>
+								</li>
+								<li>
+									<a href="serlist-pt.html">室内装潢</a>
+								</li>
+								<li>
+									<a href="serlist-gj.html">电子销售</a>
+								</li> -->
+							</ul>
+						</li>
+						
+						<li class=" nav-top dropdown">
+							<a href="${base}/sucProduct/detial_1.htm" class="dropdown-toggle on">成功案例</a>
+							<ul class="dropdown-menu">
+								<#list sucProductListFilter as product>
+								<li>
+									<a href="${base}/sucProduct/detial_${product.id}.htm">${product.name}</a>
+								</li>
+								</#list>
+							</ul>
+						</li>
+						
+						<li class=" nav-top dropdown">
+							<a href="${base}/news/show_1.htm" class="dropdown-toggle on">新闻中心</a>
+							<ul class="dropdown-menu">
+								<#list newsTypeListFilter as news>
+								<li>
+									<a href="${base}/news/show_${news.id}.htm">${news.type}</a>
+								</li>
+								</#list>
+								<!-- <li>
+									<a href="${base}/news/show_1.htm">公司新闻</a>
+								</li>
+								<li>
+									<a href="${base}/news/show_2.htm">行业资讯</a>
+								</li> -->
+							</ul>
+						</li>
+						
+						<li class=" nav-top dropdown">
+							<a href="${base}/recruit/show.htm" class="dropdown-toggle on">人才招聘</a>
+						</li>
+						
+						<li class=" nav-top dropdown">
+							<a href="${base}/contact.htm" class="dropdown-toggle on">联系我们</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="line theme"></div>
+
+		<div id="ad-carousel" class="carousel slide" data-ride="carousel">
+			<ol class="carousel-indicators">
+				<#list bannerList as banner>
+				<li data-target="#ad-carousel" data-slide-to="${banner_index}" <#if banner_index==0> class="active"</#if>></li>
+				</#list>
+				<!-- <li data-target="#ad-carousel" data-slide-to="1"></li>
+				<li data-target="#ad-carousel" data-slide-to="2"></li> -->
+			</ol>
+			<div class="carousel-inner">
+				<#list bannerList as banner>
+				<div class="item <#if banner_index==0> active</#if>">
+					<img src="${banner.bannerUrl}">
+				</div>
+				</#list>
+				<!-- <div class="item">
+					<img src="${resRoot}/web/images/banner/banner2.jpg">
+				</div>
+				<div class="item">
+					<img src="${resRoot}/web/images/banner/banner3.jpg">
+				</div> -->
+			</div>
+			<a class="left carousel-control" href="#ad-carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a class="right carousel-control" href="#ad-carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+		</div>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.regex.admin.dao.web.IWebInfoDao">
+    <!-- WebInfoDTO的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_WebInfoDTO_Map" type="com.regex.admin.common.dto.web.WebInfoDTO">
+        <id column="id" property="id" />
+        <result column="address" property="address" />
+        <result column="keywords" property="keywords" />
+        <result column="wx_pic" property="wxPic" />
+        <result column="footer" property="footer" />
+        <result column="description" property="description" />
+        <result column="header" property="header" />
+        <result column="tel" property="tel" />
+        <result column="title" property="title" />
+        <result column="lx" property="lx" />
+        <result column="ly" property="ly" />
+        <result column="email" property="email" />
+    </resultMap>
+
+	   <!-- Assist用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value} <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+	   <!-- updateAssist用于更新数据的使用它拓展自Assist,用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value} <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:t_web_info的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="t_web_info_Column">
+        t_web_info.id as id
+        ,t_web_info.address as address
+        ,t_web_info.keywords as keywords
+        ,t_web_info.wx_pic as wx_pic
+        ,t_web_info.footer as footer
+        ,t_web_info.description as description
+        ,t_web_info.header as header
+        ,t_web_info.tel as tel
+        ,t_web_info.title as title
+        ,t_web_info.lx as lx
+        ,t_web_info.ly as ly
+        ,t_web_info.email as email
+    </sql>
+
+    <!--获得类名为:WebInfoDTO对应的数据库表的数据总行数 -->
+    <select id="getWebInfoDTORowCount" parameterType="com.regex.admin.common.util.Assist" resultType="java.lang.Long">
+        select count(id) from t_web_info
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <!-- 获得类名为:WebInfoDTO对应数据库中表的数据集合 -->
+    <select id="selectWebInfoDTO" parameterType="com.regex.admin.common.util.Assist"  resultMap="result_WebInfoDTO_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_web_info_Column" /> 
+            </otherwise>
+        </choose>
+        from t_web_info
+        <choose>
+            <when test="rowSize ==null">
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+            </when>
+            <otherwise>
+                inner join
+                (
+                SELECT id as primary_key FROM t_web_info
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+                <choose>
+                    <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize} </when>
+                    <when test="rowSize !=null">LIMIT #{rowSize}</when>
+                 </choose>
+                 ) as tmp
+                 on tmp.primary_key=t_web_info.id
+            </otherwise>
+        </choose>
+    </select> 
+
+    <!-- 获得一个WebInfoDTO对象,以参数WebInfoDTO对象中不为空的属性作为条件进行查询-->
+    <select id="selectWebInfoDTOByObj" parameterType="com.regex.admin.common.dto.web.WebInfoDTO" resultMap="result_WebInfoDTO_Map">
+        select 
+            <include refid="t_web_info_Column" /> 
+        from t_web_info
+        <where>
+            <if test="email != null "> and t_web_info.email = #{email}</if>
+            <if test="ly != null "> and t_web_info.ly = #{ly}</if>
+            <if test="lx != null "> and t_web_info.lx = #{lx}</if>
+            <if test="title != null "> and t_web_info.title = #{title}</if>
+            <if test="tel != null "> and t_web_info.tel = #{tel}</if>
+            <if test="header != null "> and t_web_info.header = #{header}</if>
+            <if test="description != null "> and t_web_info.description = #{description}</if>
+            <if test="footer != null "> and t_web_info.footer = #{footer}</if>
+            <if test="wxPic != null "> and t_web_info.wx_pic = #{wxPic}</if>
+            <if test="keywords != null "> and t_web_info.keywords = #{keywords}</if>
+            <if test="address != null "> and t_web_info.address = #{address}</if>
+            <if test="id != null "> and t_web_info.id = #{id}</if>
+        </where>
+    </select> 
+
+    <!-- 通过WebInfoDTO的id获得对应数据库中表的数据对象-->
+    <select id="selectWebInfoDTOById" parameterType="java.lang.Long" resultMap="result_WebInfoDTO_Map">
+        select 
+            <include refid="t_web_info_Column" /> 
+        from t_web_info
+        where t_web_info.id = #{id}
+    </select> 
+
+    <!-- 将WebInfoDTO插入到对应数据库的表中,包括属性值为null的数据-->
+
+    <insert id="insertWebInfoDTO" parameterType="com.regex.admin.common.dto.web.WebInfoDTO">
+        insert into t_web_info(id,address,keywords,wx_pic,footer,description,header,tel,title,lx,ly,email) 
+        values(#{id},#{address},#{keywords},#{wxPic},#{footer},#{description},#{header},#{tel},#{title},#{lx},#{ly},#{email})
+    </insert>
+
+    <!-- 将WebInfoDTO中属性值不为null的数据,插入到对应数据库的表中-->
+    <insert id="insertNonEmptyWebInfoDTO" parameterType="com.regex.admin.common.dto.web.WebInfoDTO">
+        insert into t_web_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="address != null">address,</if>
+            <if test="keywords != null">keywords,</if>
+            <if test="wxPic != null">wx_pic,</if>
+            <if test="footer != null">footer,</if>
+            <if test="description != null">description,</if>
+            <if test="header != null">header,</if>
+            <if test="tel != null">tel,</if>
+            <if test="title != null">title,</if>
+            <if test="lx != null">lx,</if>
+            <if test="ly != null">ly,</if>
+            <if test="email != null">email,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="address != null"> #{address},</if>
+            <if test="keywords != null"> #{keywords},</if>
+            <if test="wxPic != null"> #{wxPic},</if>
+            <if test="footer != null"> #{footer},</if>
+            <if test="description != null"> #{description},</if>
+            <if test="header != null"> #{header},</if>
+            <if test="tel != null"> #{tel},</if>
+            <if test="title != null"> #{title},</if>
+            <if test="lx != null"> #{lx},</if>
+            <if test="ly != null"> #{ly},</if>
+            <if test="email != null"> #{email},</if>
+        </trim>
+    </insert>
+
+    <!-- 将WebInfoDTO批量插入到对应数据库的表中-->
+    <insert id="insertWebInfoDTOByBatch" parameterType="ArrayList">
+        insert into t_web_info(id,address,keywords,wx_pic,footer,description,header,tel,title,lx,ly,email) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id},#{item.address},#{item.keywords},#{item.wxPic},#{item.footer},#{item.description},#{item.header},#{item.tel},#{item.title},#{item.lx},#{item.ly},#{item.email})
+        </foreach>
+    </insert>
+
+    <!-- 通过WebInfoDTO的id将数据库表中对应的数据删除-->
+    <delete id="deleteWebInfoDTOById" parameterType="java.lang.Long">
+        delete from t_web_info
+        where id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将WebInfoDTO对应的数据库表的数据删除-->
+    <delete id="deleteWebInfoDTO" parameterType="com.regex.admin.common.util.Assist">
+        delete from t_web_info
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <!-- 通过WebInfoDTO的id将WebInfoDTO的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateWebInfoDTOById" parameterType="com.regex.admin.common.dto.web.WebInfoDTO">
+        update t_web_info set
+            address=#{address}
+            ,keywords=#{keywords}
+            ,wx_pic=#{wxPic}
+            ,footer=#{footer}
+            ,description=#{description}
+            ,header=#{header}
+            ,tel=#{tel}
+            ,title=#{title}
+            ,lx=#{lx}
+            ,ly=#{ly}
+            ,email=#{email}
+        where id=#{id}
+    </update>
+
+    <!-- 通过WebInfoDTO的id将WebInfoDTO中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyWebInfoDTOById" parameterType="com.regex.admin.common.dto.web.WebInfoDTO">
+        update t_web_info
+        <set>
+            <if test="address != null">
+                address=#{address},
+            </if>
+            <if test="keywords != null">
+                keywords=#{keywords},
+            </if>
+            <if test="wxPic != null">
+                wx_pic=#{wxPic},
+            </if>
+            <if test="footer != null">
+                footer=#{footer},
+            </if>
+            <if test="description != null">
+                description=#{description},
+            </if>
+            <if test="header != null">
+                header=#{header},
+            </if>
+            <if test="tel != null">
+                tel=#{tel},
+            </if>
+            <if test="title != null">
+                title=#{title},
+            </if>
+            <if test="lx != null">
+                lx=#{lx},
+            </if>
+            <if test="ly != null">
+                ly=#{ly},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将WebInfoDTO中的数据更新到数据库对应的表中,包括值为null的数据-->
+    <update id="updateWebInfoDTO" parameterType="map">
+        update t_web_info
+        <set>
+                id=#{enti.id},
+                address=#{enti.address},
+                keywords=#{enti.keywords},
+                wx_pic=#{enti.wxPic},
+                footer=#{enti.footer},
+                description=#{enti.description},
+                header=#{enti.header},
+                tel=#{enti.tel},
+                title=#{enti.title},
+                lx=#{enti.lx},
+                ly=#{enti.ly},
+                email=#{enti.email},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将WebInfoDTO中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyWebInfoDTO" parameterType="map">
+        update t_web_info
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.address != null">
+                address=#{enti.address},
+            </if>
+            <if test="enti.keywords != null">
+                keywords=#{enti.keywords},
+            </if>
+            <if test="enti.wxPic != null">
+                wx_pic=#{enti.wxPic},
+            </if>
+            <if test="enti.footer != null">
+                footer=#{enti.footer},
+            </if>
+            <if test="enti.description != null">
+                description=#{enti.description},
+            </if>
+            <if test="enti.header != null">
+                header=#{enti.header},
+            </if>
+            <if test="enti.tel != null">
+                tel=#{enti.tel},
+            </if>
+            <if test="enti.title != null">
+                title=#{enti.title},
+            </if>
+            <if test="enti.lx != null">
+                lx=#{enti.lx},
+            </if>
+            <if test="enti.ly != null">
+                ly=#{enti.ly},
+            </if>
+            <if test="enti.email != null">
+                email=#{enti.email},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户资料</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+</head>
+<body>
+          
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>修改用户信息</legend>
+</fieldset>
+ 
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户名</label>
+    <div class="layui-input-inline">
+      <input type="text" id="loginName" value="${userDTO.loginName}" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">昵称</label>
+      <div class="layui-input-inline">
+        <input type="text" id="name" value="${userDTO.name}" lay-verify="required" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid layui-word-aux">请必须写昵称</div>
+    </div>
+  </div> 
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">手机</label>
+      <div class="layui-input-inline">
+        <input type="tel" id="phone" value="${userDTO.phone}" lay-verify="phone" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div> 
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">邮箱</label>
+      <div class="layui-input-inline">
+        <input type="text" id="email" value="${userDTO.email}" lay-verify="email" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div> 
+      <div class="layui-form-item">
+    <label class="layui-form-label">添加角色</label>
+    <div class="layui-input-block">
+      <#list roleDTOs as role>
+      <input type="radio" name="roleId" id="roleId" value="${role.id}" title="${role.roleName}" <#if userRoleDTO.roleId == role.id>checked=""</#if>>  
+      </#list>
+    </div>
+  </div>
+
+    <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">头像</label>
+      <div class="layui-input-inline">
+      <div class="site-demo-upload">
+  <img id="LAY_demo_upload" src="${userDTO.headPic}" style="max-width:200px;max-height:200px;" >
+  <div class="site-demo-upbar">
+    <input type="file" name="fileField" class="layui-upload-file" id="test">
+  </div>
+</div> 
+      </div>
+    </div>
+  </div>
+  <input type="hidden" id="headPic" value="${userDTO.headPic}">
+  <input type="hidden" id="id" value="${userDTO.id}">
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn"  lay-submit=""  type="button" onclick="updateUser();">保存修改</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button type="button" class="layui-btn layui-btn-primary" onclick="history.go(-1);" >返回</button>
+    </div>
+  </div>
+</form>
+<script src="${resRoot}/layui/layui.js" charset="utf-8"></script>
+<script src="${resRoot}/js/jquery.min.js?v=2.1.4"></script>
+<script type="text/javascript" src="${resRoot}/js/ajaxfileupload.js"></script>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form()
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  
+  //自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 5){
+        return '用户名必须不小于5';
+      }
+    }
+    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+  
+  //监听提交
+  form.on('submit(demo1)', function(data){
+    layer.alert(JSON.stringify(data.field), {
+      title: '最终的提交信息'
+    })
+    return false;
+  });
+  
+  
+});
+	  layui.use('upload', function(){
+	  layui.upload({
+	    url: '${base}/uploadImage.htm', //上传接口
+	    type : 'json',
+	    success: function(res){ //上传成功后的回调
+	    	if(res != "") {
+	    		var obj = eval('(' + res + ')');
+				$("#headPic").val(obj.imageUrl);
+				$("#LAY_demo_upload").attr("src",obj.imageUrl);
+	    		
+			}
+	    },
+	    error : function(data) {
+	          alert("网络异常，请重试");
+	    }
+
+	  });  
+	  
+	   /*  layui.upload({
+	    url: '${base}/uploadImage.htm',
+	    elem: '#fileField', //指定原始元素，默认直接查找class="layui-upload-file"
+	    method: 'post', //上传接口的http类型
+	    success: function(res){
+	      layer.msg(res)
+	    }
+	  }); */ 
+	});  
+</script>
+<script>
+function check(){
+	   var password = document.getElementById("password").value;
+	   var repsword = document.getElementById("repsword").value;
+	  /*  if(password === ''){
+	      alert('密码不能为空');
+	      return false;
+	   } */
+	   if(password != repsword) {
+	      alert("两次密码不同，请重新输入");
+	      return false;
+	   }
+	    
+	}
+</script>
+<script type="text/javascript">
+     function updateUser(){
+    	 	var id = $("#id").val();
+    		var loginName = $("#loginName").val();
+    	 	var name = $("#name").val();
+    	 	var phone = $("#phone").val();
+    	 	var email = $("#email").val();
+    	 	var headPic = $("#headPic").val();
+    	 	var roleId = $("input[type='radio']:checked").val();
+    	 $.ajax({
+    		 type : "post",
+    		 url : "${base}/sys/user/updateUser.htm?id="+id,
+    		 data : {
+    			  name : name,
+    			  phone : phone,
+    			  email : email,
+    			  roleId : roleId,
+    			  headPic : headPic,
+    			  loginName : loginName
+    			 },
+			 dataType : "json",
+			 async : false,
+			 success : function(data) {
+				 flag  = data.message;
+					if(flag != 0) {
+						layer.msg('保存成功！', {
+							  icon: 1,
+							  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							  //do something
+								window.location.href="${base}/sys/user/userlist.htm";
+							});  
+
+						/* window.location.reload(); */
+					} else {
+						layer.alert("数据错误，请完善数据！");
+					}
+			 }
+    	 });
+     }    
+	</script>
+
+</body>
+</html>

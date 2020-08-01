@@ -1,0 +1,170 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.regex.admin</groupId>
+		<artifactId>regex-admin-pom</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../regex-admin-pom/pom.xml</relativePath>
+	</parent>
+	<artifactId>regex-admin-web</artifactId>
+	<packaging>war</packaging>
+	<!-- 设定主仓库，按设定顺序进行查找。 -->
+	<repositories>
+		<repository>
+			<id>regex-repos</id>
+			<name>regex Repository</name>
+			<url> http://maven.aliyun.com/nexus/content/groups/public </url>
+		</repository>
+	</repositories>
+	<!-- 设定插件仓库 -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>regex-repos</id>
+			<name>regex Repository</name>
+			<url> http://maven.aliyun.com/nexus/content/groups/public </url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>com.regex.admin</groupId>
+			<artifactId>regex-admin-common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.20</version>
+		</dependency>
+		<dependency>
+			<groupId>com.regex.admin</groupId>
+			<artifactId>regex-admin-service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<!-- logback end -->
+
+		<!-- freemarker version 配置 -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		<!-- freemarker version 配置 -->
+
+		<!-- freemarker + shiro（标签） begin -->
+		<dependency>
+			<groupId>net.mingsoft</groupId>
+			<artifactId>shiro-freemarker-tags</artifactId>
+			<version>0.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/shiro-freemarker-tags-0.1.jar</systemPath>
+		</dependency>
+		<!-- freemarker + shiro（标签） begin -->
+
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<!-- quartz 任务调度 -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		<!-- quartz end 任务调度 -->
+
+		<!-- jms start -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>4.3.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>5.7.0</version>
+		</dependency>
+		<!-- jms end -->
+
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+
+		<!-- wx pay -->
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+	</dependencies>
+</project>

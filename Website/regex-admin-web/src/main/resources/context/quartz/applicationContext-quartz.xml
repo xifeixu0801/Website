@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"
+ default-lazy-init="false">
+
+	<description>Task的定时任务配置</description>
+
+	<bean id="jobFactory" class="com.regex.admin.web.quartz.JobFactory"></bean> 
+	<!-- Task Schduler -->
+	<bean id="clusterQuartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- quartz配置文件路径, 指向cluster配置 -->
+		<property name="configLocation" value="classpath:properties/quartz.properties" />
+		<!-- Job接受applicationContext的成员变量名 -->
+		<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+		<property name="jobFactory" ref="jobFactory"></property> 
+	</bean>
+	
+	<bean id="loadTask" class="com.regex.admin.web.quartz.QuartzService" init-method="initTask" />
+</beans>

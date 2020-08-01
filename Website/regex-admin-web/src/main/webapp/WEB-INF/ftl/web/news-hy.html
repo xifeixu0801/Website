@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<title>-新闻中心</title>
+		<meta name="keywords" content="新闻中心" />
+		 <meta name="description" content="新闻中心" />
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+		<link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+		<style type="text/css">
+		.logo h1 {
+    margin: 5px 0 0 0;
+    color: #E70012;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+    background-color: #3A3A3A;
+}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="container">
+			
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						新闻中心
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<#list newsTypeList as news>
+							<li class="list-group-item">
+								<a href="${base}/news/show_${news.id}.htm">${news.type}</a>
+							</li>
+							</#list>
+							<!-- <li class="list-group-item">
+								<a href="${base}/news/show_1.htm">公司新闻</a>
+							</li>
+							<li class="list-group-item">
+								<a href="${base}/news/show_2.htm">行业资讯</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">${newsTypeDTO.type}</li>
+					</ol>
+					<div class="model-details">
+						<#list result.records as news>
+						<div class="news-model">
+							<a href="${base}/news/detial_${news.id}.htm"><b>${news.title}</b></a><span>【${news.createTime?date}】</span>
+							<p>
+								${news.detial}
+							</p>
+						</div>
+						</#list>
+						<!-- <div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div>
+						<div class="news-model">
+							<a href="news-detail.html"><b>2016年人才测评公司最新排名（人才管理、人才发展）</b></a><span>【2016-12-21 】</span>
+							<p>
+								人才管理这一概念是出现于90年代，许多企业用来招募、发展和保留人才，通过人才来驱动公司的业绩。21世纪对TM有不同的定义：Morton（2006）描述了人才管理活动的八个类别：招聘，保留，发展，领导力开发，绩效管理，雇员反馈/测量，人才规划与文化
+							</p>
+						</div> -->
+					<div id="page"></div>
+						<script type="text/javascript" src="${resRoot}/layui/layui.js"></script>
+						<script src="${resRoot}/js/jquery.min.js?v=2.1.4"></script>
+						<script src="${resRoot}/layui/lay/dest/layui.all.js" charset="utf-8"></script>
+						<#assign pageUrl=base+'/news/show_' + type + '.htm?'>
+						<#include "/page/page.html">
+						<!-- <div class="paging">
+							<ul class="pagination">
+								<li>
+									<a href="#">&laquo;</a>
+								</li>
+								<li class="active">
+									<a href="#">1</a>
+								</li>
+								<li>
+									<a href="#">2</a>
+								</li>
+								<li>
+									<a href="#">3</a>
+								</li>
+								<li>
+									<a href="#">4</a>
+								</li>
+								<li>
+									<a href="#">5</a>
+								</li>
+								<li>
+									<a href="#">&raquo;</a>
+								</li>
+							</ul>
+						</div> -->
+
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+
+</html>

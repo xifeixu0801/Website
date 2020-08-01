@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<jmxConfigurator />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 典型的日志pattern -->
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 演示按时间滚动的策略 -->
+	<appender name="defaultlogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/logs/crm.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/tmp/logs/showcase.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 保留 30天数据，默认无限-->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 按文件大小滚动的策略 -->
+	<appender name="metricsLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/logs/metrics.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>/tmp/logs/metrics.%i.log</fileNamePattern>
+			<!-- 最多保留10个文件，默认是7 -->
+      		<maxIndex>10</maxIndex>
+		</rollingPolicy>
+		
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      		<maxFileSize>10MB</maxFileSize>
+      	</triggeringPolicy>
+		
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 综合时间与大小的滚动策略，先按小时滚动，小时内的文件大于10mb时再按大小滚动 -->
+	<appender name="businessLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/tmp/logs/business.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/tmp/logs/business-%d{yyyy-MM-dd_HH}.%i.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS},%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="com.regex.admin" level="DEBUG" />
+	
+	<!-- business log 使用独立的appender，不继承Root的appender -->
+	<logger name="business" level="WARN" additivity="false">
+		<appender-ref ref="businessLogFile" />
+	</logger>
+	
+	<!-- metrics log 使用独立的appender，不继承Root的appender -->
+	<logger name="metrics" level="WARN" additivity="false">
+		<appender-ref ref="metricsLogFile" />
+	</logger>
+
+	 <logger name="java.sql.Statement" level="DEBUG">
+    </logger>  
+    <logger name="java.sql.PreparedStatement" level="DEBUG">
+       </logger>  
+    <logger name="java.sql.ResultSet" level="DEBUG">
+       </logger> 
+      
+    <logger name="java.sql.ResultSet" level="DEBUG" />
+    <logger name="org.mybatis.spring" level="DEBUG" />
+    <logger name="org.apache.ibatis" level="DEBUG" />
+    <logger name="com.ibatis"/>
+    <logger name="com.ibatis.sqlmap.engine.cache.CacheModel" level="DEBUG" />
+    <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+    <logger name="java.sql.Connection" level="WARN" />
+    <logger name="com.ibatis" level="DEBUG" />
+    <logger name="com.ibatis.common.util.StopWatch" level="DEBUG" />
+    <logger name="com.ibatis.sqlmap.engine.builder.xml.SqlMapParser" level="DEBUG" />
+    <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientImpl" level="DEBUG" />
+    <logger name="java.sql.PreparedStatement" level="DEBUG" />
+    
+    
+	<!--log4jdbc -->
+	<logger name="jdbc.sqltiming" level="DEBUG"/>
+	
+	<!--  modules -->
+	<!-- <logger name="com.huoda.modules" level="DEBUG" /> -->
+	
+	<!-- cxf inbound/outbound logger -->
+	<logger name="org.apache.cxf.services" level="DEBUG" />
+
+	<logger name="org.springframework.web" level="DEBUG" />
+	<logger name="org.springframework.data.mongodb" level="DEBUG" />
+	
+	<!-- cxf inbound/outbound logger -->
+	<logger name="org.apache.cxf.services" level="DEBUG" />
+
+	<!-- root -->
+	<root level="DEBUG">
+	    <!-- <appender-ref ref="STDOUT" /> -->
+		<appender-ref ref="console" />
+		<appender-ref ref="defaultLogFile" />
+	</root>
+</configuration>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Bean头部 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd  
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd  
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd              
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<!-- 激活@Controller模式 -->
+	<!-- <mvc:annotation-driven /> -->
+	<!-- 加载配置属性文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:properties/setting-web.properties" />
+	
+	<!-- 对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 需要更改 -->
+	<context:component-scan base-package="com.regex.admin.service" />
+	<context:component-scan base-package="com.regex.admin.web" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<bean id="springContextUtil" class="com.regex.admin.web.controller.utils.SpringContextUtil"></bean> 
+
+	<!-- <mvc:default-servlet-handler /> -->
+	
+	<!-- 支持Shiro对Controller的方法级AOP安全控制 begin-->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/forbidden</prop>
+				<!-- <prop key="java.lang.Throwable">error/500</prop> -->
+			</props>
+			</property>
+	</bean>
+	<!-- 支持Shiro对Controller的方法级AOP安全控制 end -->
+	
+	<!-- 添加注解驱动 -->  
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />  
+            <bean class="org.springframework.http.converter.FormHttpMessageConverter" />  
+            <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />  
+			<!-- @ResponseBody乱码问题，将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                   <property name="supportedMediaTypes">
+                        <list>
+                            <bean class="org.springframework.http.MediaType">
+                                <constructor-arg index="0" value="text" />
+                                <constructor-arg index="1" value="plain" />
+                                <constructor-arg index="2" value="UTF-8" />
+                            </bean>
+                        </list>
+                    </property>
+          	</bean>
+          	<!-- API接口默认返回FASTJSON -->
+			<bean
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="charset" value="UTF-8" />
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json</value>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+				<property name="features">
+					<list>
+						<value>WriteMapNullValue</value>
+						<value>QuoteFieldNames</value>
+						<value>WriteDateUseDateFormat</value>
+						<value>WriteEnumUsingToString</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>messages</value>
+		</property>
+	</bean>
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+	</bean>
+
+	<bean id="paramResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+		<property name="paramName" value="method" />
+		<property name="defaultMethodName">
+			<value>index</value>
+		</property>
+	</bean>
+
+	<bean name="mutiActionHander"
+		class="org.springframework.web.servlet.mvc.multiaction.MultiActionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- 加载配置文件 -->
+	<bean id="PropertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:properties/setting-web.properties</value>
+			</list>
+		</property>
+		<property name="placeholderPrefix" value="@{" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+
+	<bean id="viewResolver" abstract="true">
+		<property name="attributes">
+			<props>
+				<prop key="base">@{base}</prop>
+				<prop key="resRoot">@{resRoot}</prop>
+				<prop key="sysName">@{sysName}</prop>
+				<prop key="picUrl">@{picUrl}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--抛出的异常转到特定View -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="failure" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.qc.framework.util.exception.WebException">/500</prop>
+				<prop key="java.lang.Exception">/500</prop>
+				<prop key="java.lang.Throwable">/500</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置FreeMark视图 -->
+	<bean id="freeMarkerViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+		parent="viewResolver">
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="suffix" value=".html" />
+		<property name="cache" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<!-- 在页面中使用${rc.contextPath}就可获得contextPath -->
+		<property name="requestContextAttribute" value="rc" />
+		<property name="order" value="0" />
+	</bean>
+
+	<bean id="freemarkConfig"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:properties/freemarker.properties" />
+	</bean>
+
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+
+	<bean id="FreeMarkerConfigurer"
+		class="com.regex.admin.web.core.freemarker.FreeMarkerConfigExtend">
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="freemarkerSettings" ref="freemarkConfig" />
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+			</map>
+		</property>
+	</bean>
+	<!-- 文件上传配置注意:这里申明的id必须为multipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>104857600</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+</beans>

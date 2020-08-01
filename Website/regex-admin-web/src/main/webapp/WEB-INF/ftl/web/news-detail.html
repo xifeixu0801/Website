@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta charset="utf-8">
+		<title>${newsDTO.title}-</title>
+		<meta name="keywords" content="${newsDTO.keywords}" />
+		 <meta name="description" content="${newsDTO.description}" />
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						新闻中心
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<#list newsTypeList as news>
+							<li class="list-group-item">
+								<a href="${base}/news/show_${news.id}.htm">${news.type}</a>
+							</li>
+							</#list>
+							<!-- <li class="list-group-item">
+								<a href="${base}/news/show_1.htm">公司新闻</a>
+							</li>
+							<li class="list-group-item">
+								<a href="${base}/news/show_2.htm">行业资讯</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">${newsDTO.type}</li>
+					</ol>
+					<div class="model-details news-detail">
+						<h2>${newsDTO.title}</h2>
+						<p class="news-time">
+							<span class="glyphicon glyphicon-calendar"></span>【${newsDTO.createTime?date}】
+						</p>
+						<div class="news-con">
+							${newsDTO.detial}
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+
+</html>

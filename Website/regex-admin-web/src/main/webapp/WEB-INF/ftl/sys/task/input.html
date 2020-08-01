@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>更新角色</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+<link rel="stylesheet"
+	href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+<link rel="stylesheet" href="${resRoot}/css/main.css" media="all" />
+</head>
+<body class="childrenBody">
+	<fieldset class="layui-elem-field layui-field-title"
+		style="margin-top: 20px;">
+		<legend>TaskJobInfo 配置 -<#if taskJobInfo??>更新<#else>新增</#if></legend>
+	</fieldset>
+	<form class="layui-form layui-form-pane" action="#" method="post">
+		<input type="hidden" id="id" name="id" value="<#if taskJobInfo??>${taskJobInfo.id}</#if>">
+		<div class="layui-form-item">
+			<label class="layui-form-label">Task名称</label>
+			<div class="layui-input-block">
+				<input type="text" name="name" id="name" lay-verify="required"
+					autocomplete="off" value="${taskJobInfo.name}"
+					placeholder="请输入task name" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">task描述</label>
+			<div class="layui-input-block">
+				<textarea name="discription" id="discription" placeholder="请输入描述"
+					class="layui-textarea">${taskJobInfo.discription}</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">task Cron表达式</label>
+			<div class="layui-input-block">
+				<input type="text" name="cronExpression" id="cronExpression"
+					lay-verify="required" autocomplete="off"
+					value="${taskJobInfo.cronExpression}" placeholder="请输入task 表达式"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">通知邮箱</label>
+			<div class="layui-input-block">
+				<input type="text" name="sendNotificaMails" id="sendNotificaMails"
+					lay-verify="email" autocomplete="off"
+					value="${taskJobInfo.sendNotificaMails}" placeholder="请输入通知邮箱 用,分隔"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">通知手机</label>
+			<div class="layui-input-block">
+				<input type="text" name="sendNotificaTels" id="sendNotificaTels"
+					lay-verify="phone" autocomplete="off"
+					value="${taskJobInfo.sendNotificaTels}" placeholder="请输入通知邮箱 用,分隔"
+					class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">执行的Class</label>
+			<div class="layui-input-block">
+				<input type="text" name="classes" id="classes" lay-verify="required"
+					autocomplete="off" value="${taskJobInfo.classes}"
+					placeholder="请输入classes" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">参数</label>
+			<div class="layui-input-block">
+				<input type="text" name="parameter" id="parameter" lay-verify=""
+					autocomplete="off" value="${taskJobInfo.parameter}"
+					placeholder="请输入parameter" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button type="button" id="submitBtn" class="layui-btn" lay-submit=""
+					lay-filter="demo1">提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				<button type="button" class="layui-btn layui-btn-primary"
+					onclick="history.go(-1);">返回</button>
+			</div>
+		</div>
+	</form>
+	<fieldset class="layui-elem-field">
+		<legend>表达式配置说明</legend>
+		<div class="layui-field-box">
+			<p>"30 * * * * ?" 每半分钟触发任务</p>
+			<p>"30 10 * * * ?" 每小时的10分30秒触发任务</p>
+			<p>"30 10 1 * * ?" 每天1点10分30秒触发任务</p>
+			<p>"30 10 1 20 * ?" 每月20号1点10分30秒触发任务</p>
+			<p>"30 10 1 20 10 ? *" 每年10月20号1点10分30秒触发任务</p>
+			<p>"30 10 1 20 10 ? 2011" 2011年10月20号1点10分30秒触发任务</p>
+			<p>"30 10 1 ? 10 * 2011" 2011年10月每天1点10分30秒触发任务</p>
+			<p>"30 10 1 ? 10 SUN 2011" 2011年10月每周日1点10分30秒触发任务</p>
+			<p>"15,30,45 * * * * ?" 每15秒，30秒，45秒时触发任务</p>
+			<p>"15-45 * * * * ?" 15到45秒内，每秒都触发任务</p>
+			<p>"15/5 * * * * ?" 每分钟的每15秒开始触发，每隔5秒触发一次</p>
+			<p>"15-30/5 * * * * ?" 每分钟的15秒到30秒之间开始触发，每隔5秒触发一次</p>
+			<p>"0 0/3 * * * ?" 每小时的第0分0秒开始，每三分钟触发一次</p>
+			<p>"0 15 10 ? * MON-FRI" 星期一到星期五的10点15分0秒触发任务</p>
+			<p>"0 15 10 L * ?" 每个月最后一天的10点15分0秒触发任务</p>
+			<p>"0 15 10 LW * ?" 每个月最后一个工作日的10点15分0秒触发任务</p>
+			<p>"0 15 10 ? * 5L" 每个月最后一个星期四的10点15分0秒触发任务</p>
+			<p>"0 15 10 ? * 5#3" 每个月第三周的星期四的10点15分0秒触发任务</p>
+		</div>
+	</fieldset>
+	<script type="text/javascript" src="${resRoot}/layui/layui.js"></script>
+	<script type="text/javascript" src="${resRoot}/js/jquery.min.js"></script>
+	<script type="text/javascript">
+	layui.use('form', function(){
+		$("#submitBtn").click(function(){
+			var name=$("#name").val();
+			var id=$("#id").val();
+			var cronExpression=$("#cronExpression").val();
+			var sendNotificaMails=$("#sendNotificaMails").val();
+			var sendNotificaTels=$("#sendNotificaTels").val();
+			var discription=$("#discription").val();
+			var classes=$("#classes").val();
+				$.ajax({
+					type : "post",
+					url : "${base}/sys/task/save.htm",
+					data : {
+						id : id,
+						name : name,
+						cronExpression : cronExpression,
+						sendNotificaMails : sendNotificaMails,
+						sendNotificaTels : sendNotificaTels,
+						discription : discription,
+						classes : classes
+						},
+					dataType : "json",
+					async : false,
+					success : function(data) {
+						if(data.message == 2) {
+								layer.msg('请完善数据！');   
+								// return false;
+							} else if(data.message == 1) {
+								layer.msg('保存成功！', {
+								  icon: 1,
+								  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									window.location.href="${base}/sys/task/show.htm";
+								});   
+							} else {
+								layer.msg('系统繁忙！'); 
+							}
+					}
+				}); 
+		});
+			
+	});
+	</script>
+</body>
+</html>

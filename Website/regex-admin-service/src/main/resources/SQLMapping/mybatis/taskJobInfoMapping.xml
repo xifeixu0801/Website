@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.regex.admin.dao.sys.ITaskJobInfoDAO">
+	<sql id="Base_Column_List">
+        id, is_del, create_time, update_time, name, state, cron_expression,
+		send_notifica_mails, send_notifica_tels, classes, parameter, discription
+    </sql>
+	<insert id="insert" parameterType="com.regex.admin.common.dto.sys.TaskJobInfo">
+		insert into sys_task_job_info (id,is_del, create_time, update_time, name, state, cron_expression,
+		send_notifica_mails, send_notifica_tels, classes, parameter, discription)
+		values(#{id},#{isDel}, #{createTime}, #{updateTime}, #{name}, #{state}, #{cronExpression}, #{sendNotificaMails},
+		#{sendNotificaTels}, #{classes}, #{parameter}, #{discription})
+	</insert>
+	<update id="update" parameterType="com.regex.admin.common.dto.sys.TaskJobInfo" >
+		update sys_task_job_info set name=#{name}, state=#{state},cron_expression=#{cronExpression},
+		send_notifica_mails=#{sendNotificaMails},send_notifica_tels=#{sendNotificaTels},classes=#{classes},
+		parameter=#{parameter},discription=#{discription} where id=#{id}		
+	</update>
+	<select id="getById" parameterType="String" resultType="com.regex.admin.common.dto.sys.TaskJobInfo">
+		SELECT
+			id AS id,
+			is_del AS isDel,
+			create_time AS createTime,
+			update_time AS updateTime,
+			NAME AS NAME,
+			state AS state,
+			cron_expression AS cronExpression,
+			send_notifica_mails AS sendNotificaMails,
+			send_notifica_tels AS sendNotificaTels,
+			classes AS classes,
+			parameter AS parameter,
+			discription AS discription
+		FROM
+			sys_task_job_info
+		WHERE
+			id = #{id}
+	</select>
+	<select id="getAll"  resultType="com.regex.admin.common.dto.sys.TaskJobInfo">
+		SELECT
+			id AS id,
+			is_del AS isDel,
+			create_time AS createTime,
+			update_time AS updateTime,
+			NAME AS NAME,
+			state AS state,
+			cron_expression AS cronExpression,
+			send_notifica_mails AS sendNotificaMails,
+			send_notifica_tels AS sendNotificaTels,
+			classes AS classes,
+			parameter AS parameter,
+			discription AS discription
+		FROM
+			sys_task_job_info
+			where 
+			state=1
+	</select>
+	<select id="getByCountParam" resultType="int">
+		SELECT
+			count(0) as count
+		FROM
+			sys_task_job_info
+	</select>
+	<update id="updateState" parameterType="String" >
+		update sys_task_job_info set state=0 where id=#{id}
+	</update>
+	<delete id="del" parameterType="String">
+		delete from sys_task_job_info where id=#{id} 
+	</delete>
+	<select id="getPage"  resultType="com.regex.admin.common.dto.sys.TaskJobInfo">
+		SELECT
+			id AS id,
+			is_del AS isDel,
+			create_time AS createTime,
+			update_time AS updateTime,
+			NAME AS NAME,
+			state AS state,
+			cron_expression AS cronExpression,
+			send_notifica_mails AS sendNotificaMails,
+			send_notifica_tels AS sendNotificaTels,
+			classes AS classes,
+			parameter AS parameter,
+			discription AS discription
+		FROM
+			sys_task_job_info
+			where is_del!='1'
+			<if test="state != null and state != ''">
+				AND state=#{state}
+			</if>
+	</select>
+</mapper>

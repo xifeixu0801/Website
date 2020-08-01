@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>操作日志</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+	<link rel="stylesheet" href="${resRoot}/css/news.css" media="all" />
+</head>
+<body class="childrenBody">
+	<blockquote class="layui-elem-quote news_search">
+		<div class="layui-inline">
+		    <a class="layui-btn search_btn">查询</a>
+		</div>
+		<div class="layui-inline">
+			<a class="layui-btn linksAdd_btn" style="background-color:#5FB878" href="${base}/sys/product/input.htm">添加</a>
+		</div>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>序号</th>
+					<th>标题</th>
+					<th>排序</th>
+					<th>缩略图</th>
+					<th>操作</th>
+				</tr>
+		    </thead>
+		    <tbody>
+		    	<#list result.records as product>
+		    	<tr>
+					<td>${product_index+1}</td>
+					<td>${product.name}</td>
+					<td>${product.sort}</td>
+					<td><img src="${product.picUrl}" style="max-width:100px;max-height:50px;" ></td>
+					<td><a class="layui-btn layui-btn-mini links_edit" href="${base}/sys/product/input.htm?id=${product.id}"><i class="iconfont icon-edit"></i>修改</a> 
+		        		<a class="layui-btn layui-btn-danger layui-btn-mini links_del" href="javascript:void(0);" onclick="del(${product.id});" ><i class="layui-icon"></i>删除</a>
+		        	</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
+	<div id="page"></div>
+	<script type="text/javascript" src="${resRoot}/layui/layui.js"></script>
+	<script src="${resRoot}/js/jquery.min.js?v=2.1.4"></script>
+	<script src="${resRoot}/layui/lay/dest/layui.all.js" charset="utf-8"></script>
+	<#assign pageUrl=base+'/sys/product/show.htm?'>
+	<#include "/page/page.html">
+	<script>
+	$(".search_btn").click(function(){
+		  window.location.reload();
+	  });
+	  		function del(id){	
+  			 if(confirm("确定要删除该数据吗?")){
+  				 $.ajax({
+  		    		 type : "post",
+  		    		 url : "${base}/sys/product/del.htm",
+  		    		 data : {
+  		    			  id : id
+  		    			 },
+  					 dataType : "json",
+  					 async : false,
+  					 success : function(data) {
+  						 flag  = data.message;
+  							if(flag != 0) {
+  								layer.msg('删除成功！', {
+  									  icon: 1,
+  									  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+  									}, function(){
+  									  //do something
+  										window.location.reload();
+  									});  
+
+  								
+  							} else {
+  								layer.alert("数据错误，请完善数据！");
+  							}
+  					 }
+  		    	 });
+  			}
+		}
+	  		
+
+</script>
+</body>
+</html>

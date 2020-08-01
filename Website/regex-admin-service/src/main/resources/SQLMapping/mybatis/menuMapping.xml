@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.regex.admin.dao.sys.IMenuDAO">
+	<sql id="Base_Column_List">
+        id, parent_id, name, url, perms, type, icon, order_num, is_del
+    </sql>
+	<insert id="insert" parameterType="com.regex.admin.common.dto.sys.MenuDTO"
+	useGeneratedKeys="true" keyProperty="id">
+		insert into sys_menu(parent_id, name, url, perms, type, icon, order_num, is_del)
+		values(#{parentId}, #{name}, #{url}, #{perms}, #{type}, #{icon}, #{orderNum}, #{isDel})
+	</insert>
+	<update id="update" parameterType="com.regex.admin.common.dto.sys.MenuDTO">
+		update sys_menu set parent_id=#{parentId}, name=#{name}, url=#{url}, perms=#{perms},
+		type=#{type}, 
+		<if test="icon != null and icon !=''">
+		icon=#{icon}, 
+		</if>
+		order_num=#{orderNum}
+		where id=#{id}
+	</update>
+	<select id="getById" parameterType="long" resultType="com.regex.admin.common.dto.sys.MenuDTO" >
+		select id as id,
+		parent_id as parentId,
+		name as name,
+		url as url,
+		perms as perms,
+		type as type,
+		icon as icon,
+		order_num as orderNum,
+		is_del as isDel
+		from sys_menu where id=#{id}
+	</select>
+	<select id="getByParam" resultType="com.regex.admin.common.dto.sys.MenuDTO">
+		select id as id,
+		parent_id as parentId,
+		name as name,
+		url as url,
+		perms as perms,
+		type as type,
+		icon as icon,
+		order_num as orderNum,
+		is_del as isDel
+		from sys_menu where is_del!='1'
+	</select>
+	<select id="getByCountParam" resultType="int">
+		select count(0) as count
+		from sys_menu where is_del!='1'
+	</select>
+	<update id="del" parameterType="long">
+		update sys_menu set is_del='1' where id=#{id}
+	</update>
+	<select id="getMenuDTOByParentId" parameterType="Map" resultType="com.regex.admin.common.dto.sys.MenuDTO">
+		select id as id,
+		parent_id as parentId,
+		name as name,
+		url as url,
+		perms as perms,
+		type as type,
+		icon as icon,
+		order_num as orderNum,
+		is_del as isDel
+		from sys_menu where is_del!='1'
+		AND parent_id=#{parentId}
+		AND type!=#{type}
+		order by order_num ASC
+	</select>
+	<select id="getCountByParentId" parameterType="Map" resultType="int">
+		select count(0) as count
+		from sys_menu where is_del!='1'
+		AND parent_id=#{parentId}
+	</select>
+</mapper>

@@ -1,0 +1,63 @@
+<#setting url_escaping_charset='utf-8'>
+<!DOCTYPE HTML>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+${head}
+<title>${webInfo.title}${title}</title>
+<link href="${resRoot}/web/css/bootstrap.min.css" rel="stylesheet">
+<link href="${resRoot}/web/css/master.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="${resRoot}/web/js/html5shiv.js"></script>
+<script src="${resRoot}/web/js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+	<#include "header.html">
+	${body}
+	<#include "footer.html">
+	<script src="${resRoot}/web/js/jquery-1.11.1.min.js"></script>
+		<script src="${resRoot}/web/js/bootstrap.min.js"></script>
+		<script>
+			/*导航条标题点击事件*/
+			$(".dropdown-toggle").click(function() {
+
+				if($(this).attr('href')) {
+					window.location = $(this).attr('href');
+				}
+
+			});
+
+			/*广告轮播*/
+			$(function() {
+				$('#ad-carousel').carousel();
+				$('#menu-nav .navbar-collapse a').click(function(e) {
+					var href = $(this).attr('href');
+					var tabId = $(this).attr('data-tab');
+					if('#' !== href) {
+						e.preventDefault();
+						$(document).scrollTop($(href).offset().top - 70);
+						if(tabId) {
+							$('#feature-tab a[href=#' + tabId + ']').tab('show');
+						}
+					}
+				});
+			});
+
+			/*导航条*/
+			$(function() {
+				$(".dropdown").mouseover(function() {
+
+					$(this).addClass("open");
+				});
+
+				$(".dropdown").mouseleave(function() {
+
+					$(this).removeClass("open");
+				});
+			});
+		</script>
+</body>
+
+</html>

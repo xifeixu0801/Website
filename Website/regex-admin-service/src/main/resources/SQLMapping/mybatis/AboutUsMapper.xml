@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.regex.admin.dao.web.IAboutUsDao">
+    <!-- AboutUsDTO的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_AboutUsDTO_Map" type="com.regex.admin.common.dto.web.AboutUsDTO">
+        <id column="id" property="id" />
+        <result column="update_time" property="updateTime" />
+        <result column="keywords" property="keywords" />
+        <result column="create_time" property="createTime" />
+        <result column="name" property="name" />
+        <result column="is_del" property="isDel" />
+        <result column="description" property="description" />
+        <result column="detial" property="detial" />
+        <result column="sort" property="sort" />
+        <result column="pic_url" property="picUrl" />
+    </resultMap>
+
+	   <!-- Assist用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} #{req.value} <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+	   <!-- updateAssist用于更新数据的使用它拓展自Assist,用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} #{req.value} <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:t_about_us的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="t_about_us_Column">
+        t_about_us.id as id
+        ,t_about_us.update_time as update_time
+        ,t_about_us.keywords as keywords
+        ,t_about_us.create_time as create_time
+        ,t_about_us.name as name
+        ,t_about_us.is_del as is_del
+        ,t_about_us.description as description
+        ,t_about_us.detial as detial
+        ,t_about_us.sort as sort
+        ,t_about_us.pic_url as pic_url
+    </sql>
+
+    <!--获得类名为:AboutUsDTO对应的数据库表的数据总行数 -->
+    <select id="getAboutUsDTORowCount" parameterType="com.regex.admin.common.util.Assist" resultType="java.lang.Long">
+        select count(id) from t_about_us
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <!-- 获得类名为:AboutUsDTO对应数据库中表的数据集合 -->
+    <select id="selectAboutUsDTO" parameterType="com.regex.admin.common.util.Assist"  resultMap="result_AboutUsDTO_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="t_about_us_Column" /> 
+            </otherwise>
+        </choose>
+        from t_about_us
+        <choose>
+            <when test="rowSize ==null">
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+            </when>
+            <otherwise>
+                inner join
+                (
+                SELECT id as primary_key FROM t_about_us
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+                <choose>
+                    <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize} </when>
+                    <when test="rowSize !=null">LIMIT #{rowSize}</when>
+                 </choose>
+                 ) as tmp
+                 on tmp.primary_key=t_about_us.id
+            </otherwise>
+        </choose>
+    </select> 
+
+    <!-- 获得一个AboutUsDTO对象,以参数AboutUsDTO对象中不为空的属性作为条件进行查询-->
+    <select id="selectAboutUsDTOByObj" parameterType="com.regex.admin.common.dto.web.AboutUsDTO" resultMap="result_AboutUsDTO_Map">
+        select 
+            <include refid="t_about_us_Column" /> 
+        from t_about_us
+        <where>
+            <if test="picUrl != null "> and t_about_us.pic_url = #{picUrl}</if>
+            <if test="sort != null "> and t_about_us.sort = #{sort}</if>
+            <if test="detial != null "> and t_about_us.detial = #{detial}</if>
+            <if test="description != null "> and t_about_us.description = #{description}</if>
+            <if test="isDel != null "> and t_about_us.is_del = #{isDel}</if>
+            <if test="name != null "> and t_about_us.name = #{name}</if>
+            <if test="createTime != null "> and t_about_us.create_time = #{createTime}</if>
+            <if test="keywords != null "> and t_about_us.keywords = #{keywords}</if>
+            <if test="updateTime != null "> and t_about_us.update_time = #{updateTime}</if>
+            <if test="id != null "> and t_about_us.id = #{id}</if>
+        </where>
+    </select> 
+
+    <!-- 通过AboutUsDTO的id获得对应数据库中表的数据对象-->
+    <select id="selectAboutUsDTOById" parameterType="java.lang.Long" resultMap="result_AboutUsDTO_Map">
+        select 
+            <include refid="t_about_us_Column" /> 
+        from t_about_us
+        where t_about_us.id = #{id}
+    </select> 
+
+    <!-- 将AboutUsDTO插入到对应数据库的表中,包括属性值为null的数据-->
+
+    <insert id="insertAboutUsDTO" parameterType="com.regex.admin.common.dto.web.AboutUsDTO">
+        insert into t_about_us(id,update_time,keywords,create_time,name,is_del,description,detial,sort,pic_url) 
+        values(#{id},#{updateTime},#{keywords},#{createTime},#{name},#{isDel},#{description},#{detial},#{sort},#{picUrl})
+    </insert>
+
+    <!-- 将AboutUsDTO中属性值不为null的数据,插入到对应数据库的表中-->
+    <insert id="insertNonEmptyAboutUsDTO" parameterType="com.regex.admin.common.dto.web.AboutUsDTO">
+        insert into t_about_us
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="keywords != null">keywords,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="name != null">name,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="description != null">description,</if>
+            <if test="detial != null">detial,</if>
+            <if test="sort != null">sort,</if>
+            <if test="picUrl != null">pic_url,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="updateTime != null"> #{updateTime},</if>
+            <if test="keywords != null"> #{keywords},</if>
+            <if test="createTime != null"> #{createTime},</if>
+            <if test="name != null"> #{name},</if>
+            <if test="isDel != null"> #{isDel},</if>
+            <if test="description != null"> #{description},</if>
+            <if test="detial != null"> #{detial},</if>
+            <if test="sort != null"> #{sort},</if>
+            <if test="picUrl != null"> #{picUrl},</if>
+        </trim>
+    </insert>
+
+    <!-- 将AboutUsDTO批量插入到对应数据库的表中-->
+    <insert id="insertAboutUsDTOByBatch" parameterType="ArrayList">
+        insert into t_about_us(id,update_time,keywords,create_time,name,is_del,description,detial,sort,pic_url) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id},#{item.updateTime},#{item.keywords},#{item.createTime},#{item.name},#{item.isDel},#{item.description},#{item.detial},#{item.sort},#{item.picUrl})
+        </foreach>
+    </insert>
+
+    <!-- 通过AboutUsDTO的id将数据库表中对应的数据删除-->
+    <delete id="deleteAboutUsDTOById" parameterType="java.lang.Long">
+        delete from t_about_us
+        where id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将AboutUsDTO对应的数据库表的数据删除-->
+    <delete id="deleteAboutUsDTO" parameterType="com.regex.admin.common.util.Assist">
+        delete from t_about_us
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <!-- 通过AboutUsDTO的id将AboutUsDTO的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateAboutUsDTOById" parameterType="com.regex.admin.common.dto.web.AboutUsDTO">
+        update t_about_us set
+            update_time=#{updateTime}
+            ,keywords=#{keywords}
+            ,create_time=#{createTime}
+            ,name=#{name}
+            ,is_del=#{isDel}
+            ,description=#{description}
+            ,detial=#{detial}
+            ,sort=#{sort}
+            ,pic_url=#{picUrl}
+        where id=#{id}
+    </update>
+
+    <!-- 通过AboutUsDTO的id将AboutUsDTO中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyAboutUsDTOById" parameterType="com.regex.admin.common.dto.web.AboutUsDTO">
+        update t_about_us
+        <set>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="keywords != null">
+                keywords=#{keywords},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="isDel != null">
+                is_del=#{isDel},
+            </if>
+            <if test="description != null">
+                description=#{description},
+            </if>
+            <if test="detial != null">
+                detial=#{detial},
+            </if>
+            <if test="sort != null">
+                sort=#{sort},
+            </if>
+            <if test="picUrl != null">
+                pic_url=#{picUrl},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将AboutUsDTO中的数据更新到数据库对应的表中,包括值为null的数据-->
+    <update id="updateAboutUsDTO" parameterType="map">
+        update t_about_us
+        <set>
+                id=#{enti.id},
+                update_time=#{enti.updateTime},
+                keywords=#{enti.keywords},
+                create_time=#{enti.createTime},
+                name=#{enti.name},
+                is_del=#{enti.isDel},
+                description=#{enti.description},
+                detial=#{enti.detial},
+                sort=#{enti.sort},
+                pic_url=#{enti.picUrl},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将AboutUsDTO中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyAboutUsDTO" parameterType="map">
+        update t_about_us
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.updateTime != null">
+                update_time=#{enti.updateTime},
+            </if>
+            <if test="enti.keywords != null">
+                keywords=#{enti.keywords},
+            </if>
+            <if test="enti.createTime != null">
+                create_time=#{enti.createTime},
+            </if>
+            <if test="enti.name != null">
+                name=#{enti.name},
+            </if>
+            <if test="enti.isDel != null">
+                is_del=#{enti.isDel},
+            </if>
+            <if test="enti.description != null">
+                description=#{enti.description},
+            </if>
+            <if test="enti.detial != null">
+                detial=#{enti.detial},
+            </if>
+            <if test="enti.sort != null">
+                sort=#{enti.sort},
+            </if>
+            <if test="enti.picUrl != null">
+                pic_url=#{enti.picUrl},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

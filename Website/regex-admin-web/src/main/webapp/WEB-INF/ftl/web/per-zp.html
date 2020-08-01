@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<title>人才招聘-</title>
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						人才招聘
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<li class="list-group-item">
+								<a href="${base}/recruit/show.htm">全部职位</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-9 bg-white">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">全部职位</li>
+					</ol>
+					<div class="model-details">
+						<#list recruitList as recruit>
+							<table class="per-intr">
+							<tr>
+								<th>职位名称</th>
+								<th>学历要求</th>
+								<th>工作地点</th>
+								<th>发布时间</th>
+							</tr>
+						</table>
+						<div class="panel-group" id="panel-${recruit.id}">
+							<div class="panel <#if recruit_index==0> panel-default</#if>">
+								<div class="panel-heading">
+									<a class="panel-title" data-toggle="collapse" data-parent="#panel-${recruit.id}" href="#panel-element-${recruit.id}" >
+										<ul class="per-ad clearfix">
+											<li>${recruit.jobName}</li>
+											<li>${recruit.jobDemand}</li>
+											<li>${recruit.jobAddress}</li>
+											<li>${recruit.publishTime?date}</li>
+										</ul>
+									</a>
+								</div>
+								<div id="panel-element-${recruit.id}" class="panel-collapse in" style="height: auto;">
+									<div class="panel-body" contenteditable="true">
+										${recruit.detial}
+									</div>
+								</div>
+							</div>
+						</#list>
+						<!-- <table class="per-intr">
+							<tr>
+								<th>职位名称</th>
+								<th>学历要求</th>
+								<th>工作地点</th>
+								<th>发布时间</th>
+							</tr>
+						</table>
+						<div class="panel-group" id="panel-252439">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a class="panel-title" data-toggle="collapse" data-parent="#panel-252439" href="#panel-element-754691" >
+										<ul class="per-ad clearfix">
+											<li>业务专员</li>
+											<li>中专以上</li>
+											<li>昆山</li>
+											<li>2017-6-9</li>
+										</ul>
+									</a>
+								</div>
+								<div id="panel-element-754691" class="panel-collapse in" style="height: auto;">
+									<div class="panel-body" contenteditable="true">
+										职位：业务专员
+										招聘要求:<br />
+										<br />
+										1、女性1.6m以上；男性1.7m以上,20岁 至 30岁;<br />
+										2、有相关工作经验；<br />
+										3、熟练应用各种办公软件；<br />
+										4、沟通能力强，有耐心，具备较强的亲和力；<br />
+										5、具备物流/客户服务及相关专业者优先；<br />
+										6、中专以上；<br />
+										<br />
+										工作概述：<br />
+										1、通过电话与客户沟通，完成定单；<br />
+										2、安排相关物流部门收货、发货、车辆调遣；<br />
+										3、帐款核实、跟催；<br />
+										4、客户与相关业务单位电话接听，解答；<br />
+										联系时间：周一至周六<br />
+										岗位咨询方式：0512-55252288<br />
+										简历投递邮箱：eason_li@juliks.com
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-252439" href="#panel-element-56223" >
+										<ul class="per-ad clearfix">
+											<li>业务专员</li>
+											<li>中专以上</li>
+											<li>昆山</li>
+											<li>2017-6-9</li>
+										</ul>
+									</a>
+								</div>
+								<div id="panel-element-56223" class="panel-collapse collapse" style="height: 0px;">
+									<div class="panel-body" contenteditable="true">
+										职位：业务专员
+										招聘要求:<br />
+										<br />
+										1、女性1.6m以上；男性1.7m以上,20岁 至 30岁;<br />
+										2、有相关工作经验；<br />
+										3、熟练应用各种办公软件；<br />
+										4、沟通能力强，有耐心，具备较强的亲和力；<br />
+										5、具备物流/客户服务及相关专业者优先；<br />
+										6、中专以上；<br />
+										<br />
+										工作概述：<br />
+										1、通过电话与客户沟通，完成定单；<br />
+										2、安排相关物流部门收货、发货、车辆调遣；<br />
+										3、帐款核实、跟催；<br />
+										4、客户与相关业务单位电话接听，解答；<br />
+										联系时间：周一至周六<br />
+										岗位咨询方式：0512-55252288<br />
+										简历投递邮箱：eason_li@juliks.com
+									</div>	
+								</div>
+							</div> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

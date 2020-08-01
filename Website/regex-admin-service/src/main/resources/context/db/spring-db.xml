@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- 配置读取外部配置文件 -->
+	
+	<!-- <context:property-placeholder ignore-unresolvable="true" location="classpath:properties/jdbc.properties" /> -->
+	
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 数据库基本信息配置 -->
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/zz_db?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;autoReconnect=true" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+		<property name="filters" value="stat" />
+		<!-- 最大并发连接数 -->
+		<property name="maxActive" value="20" />
+		<!-- 初始化连接数量 -->
+		<property name="initialSize" value="1" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="10" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="maxOpenPreparedStatements" value="20" />
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+		<property name="proxyFilters">
+	        <list>
+	            <ref bean="log-filter"/>
+	        </list>
+	    </property>
+	</bean>
+	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+    	<property name="resultSetLogEnabled" value="true" />
+	</bean>
+  
+	 <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->  
+	 <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	  	<!-- 配置扫描Domain的包路径 -->
+        <property name="typeAliasesPackage" value="com.regex.admin.dao.*"/>
+        <!-- 配置mybatis配置文件的位置 -->
+		<property name="configLocation" value="classpath:context/db/mybatis-config.xml" />
+        <!-- 配置扫描Mapper XML的位置 -->
+		<property name="mapperLocations"  >
+			<list>
+				<value>classpath*:SQLMapping/mybatis/*.xml</value>
+			</list>
+		</property>
+		
+		<!-- 插件配置 -->
+	    <property name="plugins">
+	        <array>
+	            <!-- 分页插件配置, 参考文档分页插件部分！！ -->
+	            <!-- 如需要开启其他插件，可配置于此 -->
+	            <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                </bean>
+	        </array>
+	    </property>
+
+	    <!-- MP 全局配置注入 -->
+	    <property name="globalConfig" ref="globalConfig"/>
+	</bean>
+	
+	<!-- 定义 MP 全局策略 -->
+	<bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+	    <!-- 主键策略配置 -->
+	    <!-- 可选参数 AUTO->`0`("数据库ID自增") INPUT->`1`(用户输入ID")  ID_WORKER->`2`("全局唯一ID") UUID->`3`("全局唯一ID") -->
+	    <property name="idType" value="2"/>
+	
+	    <!-- 数据库类型配置 -->
+	    <!-- 可选参数（默认mysql）
+	        MYSQL->`mysql`
+	        ORACLE->`oracle`
+	        DB2->`db2`
+	        H2->`h2`
+	        HSQL->`hsql`
+	        SQLITE->`sqlite`
+	        POSTGRE->`postgresql`
+	        SQLSERVER2005->`sqlserver2005`
+	        SQLSERVER->`sqlserver`
+	    -->
+	    <property name="dbType" value="mysql"/>
+	
+	    <!-- 全局表为下划线命名设置 true -->
+	    <property name="dbColumnUnderline" value="true"/>
+	</bean>
+	
+ 	<!-- <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.baomidou.springwind.mapper" />
+	</bean>  -->
+	
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.regex.admin.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean>  
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean> -->
+  
+    <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->  
+    <bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+    
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="accept*" propagation="REQUIRED"/>
+            <tx:method name="reject*" propagation="REQUIRED"/>
+            <tx:method name="execute*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="recover*" propagation="REQUIRED"/>
+            <tx:method name="sync*" propagation="REQUIRED"/>
+            <tx:method name="*" read-only="true"/>
+            <tx:method name="get*" read-only="true" />  
+            <tx:method name="query*" read-only="true" />  
+            <tx:method name="find*" read-only="true" />  
+            <tx:method name="load*" read-only="true" />
+            <tx:method name="select*" read-only="true" /> 
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="txPointcut"
+                      expression="execution(* com.regex..*service.*(..))"/>
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+    </aop:config>
+	
+</beans>

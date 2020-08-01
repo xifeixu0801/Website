@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<title>联系我们</title>
+		<meta name="keywords" content="${webInfoDTO.keywords}" />
+		 <meta name="description" content="${webInfoDTO.description}" />
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						联系我们
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<li class="list-group-item">
+								<a href="${base}/contact.htm">联系我们</a>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+				<div class="col-md-9">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">联系我们</li>
+					</ol>
+					<div class="model-details">
+						<div class="map">
+							<iframe src="${base}/map.htm"></iframe>
+						</div>
+						<ul class="addre  clearfix">
+							<li class="col-sm-4 col-xs-12">
+								<div>
+									<div><span class="glyphicon glyphicon-map-marker"></span></div>
+									<p>公司地址：${webInfoDTO.address} </p>
+								</div>
+							</li>
+							<li class="col-sm-4 col-xs-12">
+								<div>
+									<div><span class="glyphicon glyphicon-phone-alt"></span></div>
+									<p>联系电话：${webInfoDTO.tel}</p>
+								</div>
+							</li>
+							<li class="col-sm-4 col-xs-12">
+								<div>
+									<div><span class="glyphicon glyphicon-envelope"></span></div>
+									<p>联系邮箱：${webInfoDTO.email}</p>
+								</div>
+							</li>
+						</ul>
+						<div class="row">
+							<div class=" col-xs-12">
+								<form>
+									<input placeholder="姓名" type="name" id="name">
+									<input placeholder="邮箱" type="email" id="email">
+									<input placeholder="电话" type="text" id="text">
+									<textarea placeholder="消息" rows="5" id="content"></textarea>
+								</form>
+								<a class="btn btn-primary" onclick="save();" >发送</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="${resRoot}/layui/lay/dest/layui.all.js" charset="utf-8"></script>
+		<script type="text/javascript">
+		function save() {
+			var name =$("#name").val();
+			var email=$("#email").val();
+			var tel = $("#text").val();
+			var content = $("#content").val();
+			var flag = true;
+			if(content==""|| content == null || content=="undifined") {
+				alert("请输入留言！");
+				flag = false;
+				return false;
+			}
+			if(flag) {
+				$.ajax({
+					type : "post",
+					url : "${base}/message/save.htm",
+					data : {
+						name : name,
+						email : email,
+						tel : tel,
+						content : content
+						},
+					dataType : "json",
+					async : false,
+					success : function(data) {
+						if(data.message == 2) {
+							layer.alert('请输入留言');   
+								// return false;
+							} else if(data.message == 1) {
+								$("#content").html("");
+								layer.msg('感谢，您的留言已提交成功！', {
+								  icon: 1,
+								  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									window.location.reload();
+								});   
+							} else {
+								layer.msg('系统繁忙！'); 
+							}
+					}
+				}); 
+			}
+		}
+		</script>
+		
+	</body>
+
+</html>

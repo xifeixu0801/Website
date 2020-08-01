@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<title>${aboutUsDTO.name}-</title>
+		<meta name="keywords" content="${aboutUs.keywords}" />
+		 <meta name="description" content="${aboutUs.description}" />
+		<link href="${resRoot}/web/css/model.css" rel="stylesheet">
+	</head>
+
+	<body>
+		
+		<div class="container">
+			<div class="row row-3">
+				<div class="col-md-3">
+					<div class="model-title theme">
+						关于我们
+					</div>
+					<div class="model-list">
+						<ul class="list-group">
+							<#list aboutUsList as aboutUs>
+							<li class="list-group-item">
+								<a href="${base}/aboutUs/detial_${aboutUs.id}.htm">${aboutUs.name}</a>
+							</li>
+							</#list>
+							<!-- <li class="list-group-item">
+								<a href="culture.html">企业文化</a>
+							</li>
+							<li class="list-group-item">
+								<a href="honor.html">企业荣誉</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-9 bg-white">
+					<ol class="breadcrumb">
+						<li><i class="glyphicon glyphicon-home"></i><a href="${base}/">主页</a></li>
+						<li class="active">${aboutUsDTO.name}</li>
+					</ol>
+					<div class="model-details">
+						${aboutUsDTO.detial}
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</body>
+
+</html>

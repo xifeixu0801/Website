@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>添加用户</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+</head>
+<body>
+          
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>添加用户</legend>
+</fieldset>
+ 
+<form class="layui-form" action="#" >
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="loginName" id="loginName" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <input type="password" id="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">再次输入</label>
+    <div class="layui-input-inline">
+      <input type="password" id="oldPassword" name="oldPassword" lay-verify="pass" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">昵称</label>
+      <div class="layui-input-inline">
+        <input type="text" id="name" name="name" lay-verify="required" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid layui-word-aux">请必须写昵称</div>
+    </div>
+  </div> 
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">验证手机</label>
+      <div class="layui-input-inline">
+        <input type="tel" name="phone" id="phone" lay-verify="" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div> 
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">验证邮箱</label>
+      <div class="layui-input-inline">
+        <input type="text" name="email" id="email" lay-verify="" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">添加角色</label>
+    <div class="layui-input-block">
+      <#list roleDTOs as role>
+      <input type="radio" name="roleId" id="roleId" value="${role.id}" title="${role.roleName}" >  
+      </#list>
+    </div>
+  </div> 
+    <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">上传头像</label>
+      <div class="layui-input-inline">
+      <div class="site-demo-upload">
+  <img id="LAY_demo_upload" src="" style="max-width:200px;max-height:200px;" >
+  
+  <div class="site-demo-upbar">
+    <input type="file" name="fileField" class="layui-upload-file" id="test">
+  </div>
+</div> 
+      </div>
+    </div>
+  </div>
+  <input type="hidden" id="headPic" name="headPic">
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" id="submitBtn"  lay-submit=""  type="button">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button type="button" class="layui-btn layui-btn-primary" onclick="history.go(-1);" >返回</button>
+    </div>
+  </div>
+</form>
+<script src="${resRoot}/layui/layui.js" charset="utf-8"></script>
+<script src="${resRoot}/js/jquery.min.js?v=2.1.4"></script>
+<script type="text/javascript" src="${resRoot}/js/ajaxfileupload.js"></script>
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form()
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+  
+  //自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 5){
+        return '用户名必须不小于5';
+      }
+    }
+    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+  
+  $("#submitBtn").click(function(){
+		var loginName=$("#loginName").val();
+		var password=$("#password").val();
+		var oldPassword=$("#oldPassword").val();
+		var name=$("#name").val();
+		var phone=$("#phone").val();
+		var email=$("#email").val();
+		var roleId = $("input[name='roleId']:checked").val();
+		var headPic=$("#headPic").val();
+		var flag = true;
+		if(password != oldPassword) {
+			layer.alert("两次密码不同，请重新输入");
+		      flag = false;
+		   }
+		if(roleId=="" || roleId ==null || roleId =="undefined") {
+			layer.alert("请选择角色！");
+		      flag = false;
+		}
+		if(flag) {
+			$.ajax({
+				type : "post",
+				url : "${base}/sys/user/adduser.htm",
+				data : {
+					loginName : loginName,
+					password : password,
+					oldPassword : oldPassword,
+					name : name,
+					phone : phone,
+					email : email,
+					roleId : roleId,
+					headPic :headPic
+					},
+				dataType : "json",
+				async : false,
+				success : function(data) {
+					if(data.message == 2) {
+							layer.msg('确认密码与密码不一致！');   
+							// return false;
+						} else if(data.message == 1) {
+							layer.msg('保存成功！', {
+							  icon: 1,
+							  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.href="${base}/sys/user/userlist.htm";
+							});   
+						} else if(data.message == 3) {
+							layer.msg('用户名不能为空！');
+						} else if(data.message == 4) {
+							layer.msg('用户名已存在！');
+						} else {
+							layer.msg('系统繁忙！'); 
+						}
+				}
+			}); 
+		}
+	});
+  
+  
+});
+	  layui.use('upload', function(){
+	  layui.upload({
+	    url: '${base}/uploadImage.htm', //上传接口
+	    type : 'json',
+	    success: function(res){ //上传成功后的回调
+	    	if(res != "") {
+	    		var obj = eval('(' + res + ')');
+				$("#headPic").val(obj.imageUrl);
+				$("#LAY_demo_upload").attr("src",obj.imageUrl);
+	    		
+			}
+	    },
+	    error : function(data) {
+	    	layer.alert("网络异常，请重试");
+	    }
+
+	  });  
+	  
+	   /*  layui.upload({
+	    url: '${base}/uploadImage.htm',
+	    elem: '#fileField', //指定原始元素，默认直接查找class="layui-upload-file"
+	    method: 'post', //上传接口的http类型
+	    success: function(res){
+	      layer.msg(res)
+	    }
+	  }); */ 
+	});  
+</script>
+</body>
+</html>

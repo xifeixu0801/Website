@@ -1,0 +1,84 @@
+<div class="web-footer">
+			<div class="container ">
+
+				<div class="row" id="map-footer">
+
+					<div class="col-md-2 col-sm-6  col-xs-12 hidden-xs">
+						<dl>
+							<dt>关于我们</dt>
+							<#list aboutUsListFilter as aboutUs>
+								<dd>
+									<a href="${base}/aboutUs/detial_${aboutUs.id}.htm">${aboutUs.name}</a>
+								</dd>
+							</#list>
+							<!-- <dd>
+								<a href="culture.html">企业文化</a>
+							</dd>
+							<dd>
+								<a href="honor.html">企业荣誉</a>
+							</dd> -->
+						</dl>
+					</div>
+					<div class="col-md-2 col-sm-6  col-xs-12 hidden-xs">
+						<dl>
+							<dt>产品中心</dt>
+							<#list productListFilter as product>
+								<dd>
+									<a href="${base}/product/detial_${product.id}.htm">${product.name}</a>
+								</dd>
+							</#list>
+							<!-- <dd>
+								<a href="serlist-wx.html">咨询服务</a>
+							</dd>
+							<dd>
+								<a href="serlist-pt.html">室内装潢</a>
+							</dd>
+							<dd>
+								<a href="serlist-gj.html">电子销售</a>
+							</dd> -->
+						</dl>
+					</div>
+					
+					<div class="col-md-2 col-sm-6  col-xs-12 hidden-xs">
+						<dl>
+							<dt>成功案例</dt>
+							<#list sucProductListFilter as product>
+								<dd>
+									<a href="${base}/sucProduct/detial_${product.id}.htm">${product.name}</a>
+								</dd>
+							</#list>
+						</dl>
+					</div>
+					
+					<div class="col-md-2 col-sm-6  col-xs-12 hidden-xs">
+						<dl>
+							<dt>新闻中心</dt>
+							<dd>
+								<a href="${base}/news/show_1.htm">企业新闻</a>
+							</dd>
+							<dd>
+								<a href="${base}/news/show_2.htm">行业资讯</a>
+							</dd>
+						</dl>
+					</div>
+					<div class="col-md-2 col-sm-6  col-xs-12 hidden-xs">
+						<dl>
+							<dt>人才招聘</dt>
+							<dd>
+								<a href="${base}/recruit/show.htm">全部职业</a>
+							</dd>
+						</dl>
+					</div>
+					<!-- <div class="col-md-4 col-sm-12  col-xs-12" id="wx"> -->
+					<div class="col-md-2 col-sm-6  col-xs-12" id="wx">
+						<p>扫描二维码，关注我们</p>
+						<img class="" src="${webInfo.wxPic}" alt="wx" style="max-width:100px;" >
+						<p>客服热线：<b style="font-size:20px">${webInfo.tel}</b></p>
+					</div>
+				</div>
+
+			</div>
+			<div id="patent-footer">
+				<p> ${webInfo.footer}</p>
+			</div>
+		</div>

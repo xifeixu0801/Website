@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>新增菜单</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="${resRoot}/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+	<link rel="stylesheet" href="${resRoot}/css/main.css" media="all" />
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  <legend>系统菜单管理-<#if menuDTO??>更新<#else>新增</#if></legend>
+</fieldset>
+<form class="layui-form layui-form-pane" action="${base}/sys/menu/save.htm" method="post" >
+	<input type="hidden" id="id" name="id" value="<#if menuDTO??>${menuDTO.id}<#else>0</#if>" >
+	<div class="layui-form-item">
+	    <label class="layui-form-label">菜单名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="name" id="name" lay-verify="required" autocomplete="off" value="${menuDTO.name}" placeholder="请输入菜单名称" class="layui-input">
+	    </div>
+  	</div>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label">父菜单</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="parentName" id ="parentName" autocomplete="off" value="${menuParentVO.name}"  class="layui-input" disabled="" >
+	      <input type="hidden" name="parentId" id ="parentId"  value="<#if menuDTO??>${menuDTO.parentId}<#else>${menuParentVO.id}</#if>"   >
+	    </div>
+  	</div>
+  	<#if menuParentVO.id == 0>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label">选择节点</label>
+	    <div class="layui-input-block" id="menuTree">
+	    </div>
+  	</div>
+  	</#if>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label">菜单链接</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="url" lay-verify="titel" value="${menuDTO.url}" autocomplete="off" placeholder="请输入菜单URL" class="layui-input">
+	    </div>
+  	</div>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label">菜单权限</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="perms" lay-verify="title" value="${menuDTO.perms}" autocomplete="off" placeholder="请输入菜单权限用','隔开" class="layui-input">
+	    <div class="layui-form-mid layui-word-aux">请输入菜单权限用','隔开</div>
+	    </div>
+  	</div>
+  	<div class="layui-form-item">
+    <label class="layui-form-label">菜单类型</label>
+    <div class="layui-input-inline">
+      <select name="type" lay-verify="required">
+        <option value="0" <#if menuDTO.type="0"> selected="selected"</#if>>目录</option>
+        <option value="1" <#if menuDTO.type="1"> selected="selected"</#if> >菜单</option>
+        <option value="2" <#if menuDTO.type="2"> selected="selected"</#if> >按钮</option>
+      </select>
+    </div>
+	</div>
+	
+	<div class="layui-form-item" pane="">
+    <label class="layui-form-label">菜单图标<br/>
+    当前图标<i class="layui-icon">${menuDTO.icon}</i></label>
+    <div class="layui-input-block">
+      <i class="layui-icon">&#xe614;</i><input type="radio" name="icon" title="设置" value="&#xe614;" <#if menuDTO.icon=="&#xe614;" >checked</#if>>
+      <i class="layui-icon">&#xe60a;</i><input type="radio" name="icon" title="list" value="&#xe60a;" <#if menuDTO.icon=="&#xe60a;" >checked</#if>>
+      <i class="layui-icon">&#xe62c;</i><input type="radio" name="icon" title="图表" value="&#xe62c;" <#if menuDTO.icon=="&#xe62c;" >checked</#if>>
+      <i class="layui-icon">&#xe629;</i><input type="radio" name="icon" title="报表" value="&#xe629;" <#if menuDTO.icon=="&#xe629;" >checked</#if>>
+      <i class="layui-icon">&#xe620;</i><input type="radio" name="icon" title="设置" value="&#xe620;" <#if menuDTO.icon=="&#xe620;" >checked</#if> >
+      <i class="layui-icon">&#xe621;</i><input type="radio" name="icon" title="文件" value="&#xe621;" <#if menuDTO.icon=="&#xe621;" >checked</#if>>
+      <i class="layui-icon">&#xe632;</i><input type="radio" name="icon" title="布局" value="&#xe632;" <#if menuDTO.icon=="&#xe632;" >checked</#if>>
+      <i class="layui-icon">&#xe638;</i><input type="radio" name="icon" title="窗口" value="&#xe638;" <#if menuDTO.icon=="&#xe638;" >checked</#if>>
+      <i class="layui-icon">&#xe63c;</i><input type="radio" name="icon" title="表单" value="&#xe63c;" <#if menuDTO.icon=="&#xe63c;" >checked</#if> >
+      <i class="layui-icon">&#xe62a;</i><input type="radio" name="icon" title="tab" value="&#xe62a;" <#if menuDTO.icon=="&#xe62a;" >checked</#if>>
+      <i class="layui-icon">&#xe654;</i><input type="radio" name="icon" title="新增" value="&#xe654;" <#if menuDTO.icon=="&#xe654;" >checked</#if>>
+      <i class="layui-icon">&#xe642;</i><input type="radio" name="icon" title="编辑" value="&#xe642;" <#if menuDTO.icon=="&#xe642;" >checked</#if>>
+      <i class="layui-icon">&#xe640;</i><input type="radio" name="icon" title="删除" value="&#xe640;" <#if menuDTO.icon=="&#xe640;" >checked</#if>>
+      <i class="layui-icon">&#xe615;</i><input type="radio" name="icon" title="搜索" value="&#xe615;" <#if menuDTO.icon=="&#xe615;" >checked</#if>>
+      <i class="layui-icon">&#xe60e;</i><input type="radio" name="icon" title="记录" value="&#xe60e;" <#if menuDTO.icon=="&#xe60e;" >checked</#if>>
+      <i class="layui-icon">&#xe631;</i><input type="radio" name="icon" title="工具" value="&#xe631;" <#if menuDTO.icon=="&#xe631;" >checked</#if>>
+      
+      
+      
+      
+    </div>
+  </div>
+	
+	<div class="layui-form-item">
+		<div class="layui-inline">
+      <label class="layui-form-label">排序</label>
+      <div class="layui-input-inline">
+        <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input" value="10" >
+      </div>
+    </div>
+	</div>
+	
+	<div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      <button type="button" class="layui-btn layui-btn-primary" onclick="history.go(-1);" >返回</button>
+    </div>
+  </div>
+</form>
+	<script type="text/javascript" src="${resRoot}/layui/layui.js"></script>
+	<script type="text/javascript" src="${resRoot}/js/main.js"></script>
+	<script type="text/javascript" src="${resRoot}/js/jquery.min.js"></script>
+
+<#if menuParentVO.id == 0>
+<script>
+//Demo
+layui.use(['tree', 'layer'], function(){
+var layer = layui.layer
+,$ = layui.jquery; 
+	  var treeJson;
+
+	  $.ajax({
+			type : "post",
+			url : "${base}/sys/menu/getMenuTree.htm",
+			data : {},
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				treeJson= data.message;
+			}
+		}); 
+	  
+
+	  layui.tree({
+		    elem: '#menuTree' //指定元素
+		    ,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+		    ,click: function(item){ //点击节点回调
+		      // layer.msg('当前节名称：'+ item.name + '<br>全部参数：'+ JSON.stringify(item));
+		      $("#parentId").val(item.id)
+		      $("#parentName").val(item.name)
+		      console.log(item);
+		    }
+		    ,nodes: treeJson
+		  });
+		  //生成一个模拟树
+});
+</script>
+</#if>
+<#if n??>
+	<script type="text/javascript">
+	window.onload=function(){ 
+		if('${n}'=='2') {
+				layer.msg('参数不能为空！');
+			} else if('${n}'=='4') {
+				layer.msg('保存错误！');
+				} else {
+					// layer.msg('保存成功！');
+					layer.msg('保存成功！', {
+					  icon: 1,
+					  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+					  //do something
+						window.location.href="${base}/sys/menu/show.htm";
+					});
+					}
+			}
+	</script>
+	</#if>
+</body>
+</html>

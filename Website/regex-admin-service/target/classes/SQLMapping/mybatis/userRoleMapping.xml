@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.regex.admin.dao.sys.IUserRoleDAO">
+	<sql id="Base_Column_List">
+        id, user_id, role_id
+    </sql>
+	<insert id="insert" parameterType="com.regex.admin.common.dto.sys.UserRoleDTO"
+	useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user_role(user_id, role_id)values(#{userId}, #{roleId})
+	</insert>
+	<select id="getByUserId" parameterType="long" resultType="com.regex.admin.common.dto.sys.UserRoleDTO">
+		select id as id,
+		user_id as userId,
+		role_id as roleId
+		from sys_user_role where user_id=#{userId} 
+	</select>
+	<delete id="del" parameterType="long">
+		delete from sys_user_role where user_id=#{userId}
+	</delete>
+	<select id="getByRoleId" parameterType="long" resultType="int">
+		select count(0) as count
+		from sys_user_role where role_id=#{roleId} 
+	</select>
+
+	<update id="update" parameterType="com.regex.admin.common.dto.sys.UserRoleDTO">
+		update sys_user_role set role_id=#{roleId} where user_id=#{userId}
+	</update>
+	<select id="selectById" parameterType="long" resultType="com.regex.admin.common.dto.sys.UserRoleDTO">
+		select id as id,
+		user_id as userId,
+		role_id as roleId
+		from sys_user_role where user_id=#{userId} 
+	</select> 
+</mapper>
